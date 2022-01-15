@@ -11,6 +11,7 @@ package net.mamoe.console.integrationtest
 
 import net.mamoe.console.integrationtest.testpoints.DoNothingPoint
 import net.mamoe.console.integrationtest.testpoints.MCITBSelfAssertions
+import net.mamoe.console.integrationtest.testpoints.PluginSharedLibraries
 import net.mamoe.console.integrationtest.testpoints.plugin.PluginDataRenameToIdTest
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -34,6 +35,7 @@ class MiraiConsoleIntegrationTestBootstrap {
             DoNothingPoint,
             MCITBSelfAssertions,
             PluginDataRenameToIdTest,
+            PluginSharedLibraries,
         ).asSequence().map { v ->
             when (v) {
                 is Class<*> -> v
