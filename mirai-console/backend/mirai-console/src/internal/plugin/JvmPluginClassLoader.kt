@@ -206,7 +206,9 @@ internal class JvmPluginClassLoaderN : URLClassLoader {
         } catch (error: ClassNotFoundException) {
             // Finally, try search from other plugins
             ctx.pluginClassLoaders.forEach { other ->
-                other.resolvePluginPublicClass(name)?.let { return it }
+                if (other !== this) {
+                    other.resolvePluginPublicClass(name)?.let { return it }
+                }
             }
             throw error
         }

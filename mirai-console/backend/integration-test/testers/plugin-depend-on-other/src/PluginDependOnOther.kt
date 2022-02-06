@@ -45,8 +45,11 @@ public object PluginDependOnOther : KotlinPlugin(
             val gsonC = Class.forName("com.google.gson.Gson")
             logger.info { "Gson located $gsonC <${gsonC.classLoader}>" }
             assertSame(gsonC, Class.forName(gsonC.name, false, pluginDepDynDownload.classLoader))
-            assertFails {
+            assertFailsWith<ClassNotFoundException> {
                 Class.forName("com.zaxxer.sparsebits.SparseBitSet") // private in dynamic-dep-download
+            }
+            assertFailsWith<ClassNotFoundException> {
+                Class.forName("net.mamoe.assertion.something.not.existing")
             }
         }
     }
