@@ -43,12 +43,17 @@ DSL 详见 [MiraiConsoleExtension](src/MiraiConsoleExtension.kt)。
 ### 打包依赖
 
 Mirai Console Gradle 在打包 JAR（`buildPlugin`） 时不会携带任何外部依赖, 
-如果您使用了不可在 `Maven Central` 搜索到的依赖, 请使用以下配置
+而是会保存一份依赖列表，在加载插件时下载，
+如果您使用了不可在 `Maven Central` 搜索到的依赖, 请使用以下配置告知 mirai-console-gradle
 
 ```groovy
 dependencies {
-    implementation "org.example:test1:1.0.0"
+    implementation "org.example:test:1.0.0"
+
+    // 无需版本号
     shadowLink "org.example:test"
+    // build.gradle.kts
+    "shadowLink"("org.example:test")
 }
 ```
 
@@ -69,7 +74,7 @@ mirai {
 
 *2021/3/21 更新:* 由于 Bintray JCenter 即将关闭，随着论坛的发展，mirai 正在策划插件中心服务。待插件中心完成后将会提供更好的插件分发平台。
 
-#### 排除依赖 (Legacy)
+#### 排除依赖 (过时)
 
 如果要在打包 JAR（`buildPluginLegacy`）时排除一些依赖，请使用如下配置：
 
