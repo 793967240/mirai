@@ -30,7 +30,11 @@ kotlin {
     explicitApiWarning()
 }
 
-configurations.register("consoleRuntimeClasspath")
+configurations.create("consoleRuntimeClasspath").attributes {
+    attribute(Usage.USAGE_ATTRIBUTE,
+        project.objects.named(Usage::class.java, Usage.JAVA_API)
+    )
+}
 
 dependencies {
     compileAndTestRuntime(project(":mirai-core-api"))
@@ -59,6 +63,8 @@ dependencies {
     testApi(`kotlin-stdlib-jdk8`)
 
     "consoleRuntimeClasspath"(project)
+    "consoleRuntimeClasspath"(project(":mirai-core-utils"))
+    "consoleRuntimeClasspath"(project(":mirai-core-api"))
     "consoleRuntimeClasspath"(project(":mirai-core"))
 }
 
@@ -89,6 +95,13 @@ tasks.getByName("compileKotlin").dependsOn(
         "net.mamoe.mirai.console.internal.MiraiConsoleBuildDependencies"
     )
 )
+
+val graphDump = DependencyDumper.registerDumpClassGraph(project, "consoleRuntimeClasspath", "allclasses.txt")
+tasks.named<Copy>("processResources").configure {
+    from(graphDump) {
+        into("META-INF/mirai-console")
+    }
+}
 
 configurePublishing("mirai-console")
 configureBinaryValidator(null)
